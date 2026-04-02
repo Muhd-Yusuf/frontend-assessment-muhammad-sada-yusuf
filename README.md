@@ -2,7 +2,7 @@
 
 A production-quality movie discovery app built for the Checkit Frontend Engineer take-home assessment.
 
-**Live URL:** _[Add after Vercel deployment]_
+**Live URL:** https://frontend-assessment-muhammad-sada-y.vercel.app
 **Stack:** Next.js 16 · TypeScript · Tailwind CSS · TanStack Query
 **API:** [The Movie Database (TMDB)](https://developer.themoviedb.org/docs)
 
