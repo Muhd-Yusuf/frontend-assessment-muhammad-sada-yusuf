@@ -59,7 +59,7 @@ export default async function MoviesPage({ searchParams }: PageProps) {
           >
             🎬 CineExplorer
           </a>
-          <p className="text-xs text-slate-500 hidden sm:block">
+          <p className="text-xs text-slate-400 hidden sm:block">
             Powered by TMDB
           </p>
         </div>
