@@ -76,7 +76,7 @@ export function MovieCard({ movie, priority = false }: MovieCardProps) {
         <h2 className="text-sm font-semibold text-white leading-snug line-clamp-2 group-hover:text-amber-400 transition-colors duration-150">
           {movie.title}
         </h2>
-        <div className="flex items-center justify-between text-xs text-slate-500">
+        <div className="flex items-center justify-between text-xs text-slate-400">
           <span>{year}</span>
           <span>{movie.vote_count.toLocaleString()} votes</span>
         </div>

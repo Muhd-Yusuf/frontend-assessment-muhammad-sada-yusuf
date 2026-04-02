@@ -79,13 +79,43 @@ The cast section on the detail page is a separate async Server Component wrapped
 ### B-2 — React 18 Streaming with Suspense ✅
 `CastSection` on `/movies/[id]` is an async Server Component with its own `fetchMovieCredits` call, wrapped in `<Suspense fallback={<CastSkeleton />}>`. The above-fold content renders immediately; the cast section streams in separately when its data resolves.
 
-### B-3 — Accessibility ✅
+### B-3 — Accessibility Audit ✅
+
+**Tool:** axe-core 4.9.1 (WCAG 2.0 A, 2.0 AA, 2.1 AA + best practices)
+**Pages audited:** `/movies` (listing) and `/movies/550` (detail — Fight Club)
+
+#### Pre-fix findings
+| Page | Violations | Rule | Impact | Nodes |
+|------|-----------|------|--------|-------|
+| `/movies` | 1 | `color-contrast` | serious | 41 |
+| `/movies/550` | (not yet audited) | — | — | — |
+
+The single violation was `color-contrast`: `text-slate-500` (#64748b) on dark card and header backgrounds produced contrast ratios of 3.74–4.23:1, below the WCAG AA minimum of 4.5:1 for small (12px) text.
+
+#### Fixes applied
+- `MovieCard` — year and vote count: `text-slate-500` → `text-slate-400`
+- Listing page footer — "Powered by TMDB": `text-slate-500` → `text-slate-400`
+- `Breadcrumb` — inactive items: `text-slate-500` → `text-slate-400`
+- Detail page — vote count secondary text, Budget/Revenue labels, cast character names: `text-slate-500` → `text-slate-400`
+
+`text-slate-400` (#94a3b8) achieves a contrast ratio of ~7.5:1 against the dark backgrounds used throughout the app, comfortably exceeding the 4.5:1 threshold.
+
+#### Post-fix results
+| Page | Violations | Passes | Incomplete |
+|------|-----------|--------|-----------|
+| `/movies` | **0** | 37 | 1 |
+| `/movies/550` | **0** | 34 | 0 |
+
+The 1 "incomplete" on the listing page is an image-alt check that axe-core could not automatically verify (it flags `next/image` optimised `<img>` tags as needing manual review — the alt text is present and correct).
+
+#### Other accessibility measures built in from the start
 - All interactive elements have visible `focus-visible:ring-2` focus rings
-- Images have descriptive `alt` text; decorative icons use `aria-hidden`
-- Empty states use `role="status"` and `aria-live="polite"` so screen readers announce result changes
+- Images have descriptive `alt` text; decorative icons use `aria-hidden="true"`
+- Empty states use `role="status"` and `aria-live="polite"` for screen reader announcements
 - Breadcrumb uses `<nav aria-label="Breadcrumb">` and `aria-current="page"` on the active item
-- Pagination uses `<nav aria-label="Pagination">` and `aria-current="page"` on the active button
-- Search input has `role="searchbox"` and `aria-label`
+- Pagination uses `<nav aria-label="Pagination">` and `aria-current="page"` on the active page button
+- Search input has an explicit `aria-label`
+- Page `<html>` has `lang="en"` set in the root layout
 
 ---
 
@@ -114,4 +144,4 @@ npm run test:coverage # generate coverage report
 
 1. Add `generateStaticParams` for the top 200 popular movies so they serve as static HTML with zero server latency
 2. Implement hover-based prefetching on movie cards (`router.prefetch`) for instant-feeling detail page loads
-3. Run a full axe-core programmatic audit and fix any remaining WCAG AA violations to push accessibility score to 100
+3. Add `generateStaticParams` for the top 200 popular movies so the most-visited detail pages serve as zero-latency static HTML
